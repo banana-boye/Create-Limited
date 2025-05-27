@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.orion.create_limited.Mixins",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "create_limited.refmap.json",
+  "mixins": [
+
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
