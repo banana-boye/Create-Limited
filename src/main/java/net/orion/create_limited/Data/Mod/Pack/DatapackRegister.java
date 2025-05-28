@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -54,6 +55,7 @@ public class DatapackRegister {
         if (registryOptional.isEmpty()) return null;
 
         String blockKey = BuiltInRegistries.BLOCK.getKey(getBlock(server, blockPos)).toString();
+        CommonConstants.debug(blockKey);
 
         for (DecayType decayType : registryOptional.get()) {
             Map<String, DecayType.DecayEntry> map = decayType.blockDecayValueMap();
@@ -62,7 +64,7 @@ public class DatapackRegister {
         return null;
     }
 
-    public static @NotNull Block getBlock(ServerLevel server, BlockPos blockPos) {
+    public static Block getBlock(ServerLevel server, BlockPos blockPos) {
         BlockState blockState = server.getBlockState(blockPos);
         return blockState.getBlock();
     }

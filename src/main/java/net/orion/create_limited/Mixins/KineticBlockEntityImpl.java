@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.orion.create_limited.Data.Constants.CommonConstants;
 import net.orion.create_limited.Data.Mod.Pack.DatapackRegister;
@@ -21,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class KineticBlockEntityImpl implements DecayData {
 
     @Unique
-    int create_Limited$decay = 0;
+    int create_Limited$decay = -1;
 
     @Unique
     long create_Limited$seconds = 0;
@@ -51,11 +52,11 @@ public abstract class KineticBlockEntityImpl implements DecayData {
             create_Limited$seconds = 0;
         }
 
-        if (create_Limited$decay < 10) level.destroyBlockProgress(id, blockPos, create_Limited$decay);
+        if (create_Limited$decay < 9) level.destroyBlockProgress(id, blockPos, create_Limited$decay);
         else {
             create_Limited$seconds = 0;
             create_Limited$ticker = 0;
-            level.destroyBlockProgress(id, blockPos, 0);
+            level.destroyBlockProgress(id, blockPos, -1);
             level.destroyBlock(blockPos, false);
         }
     }
@@ -63,7 +64,7 @@ public abstract class KineticBlockEntityImpl implements DecayData {
     @Inject(method = "remove", at = @At("TAIL"))
     public void removeTail(CallbackInfo ci) {
         BlockPos blockPos = ((BlockEntityAccessor) this).getWorldPosition();
-        ((BlockEntityAccessor) this).getLevel().destroyBlockProgress(blockPos.hashCode(), blockPos, 0);
+        ((BlockEntityAccessor) this).getLevel().destroyBlockProgress(blockPos.hashCode(), blockPos, -1);
     }
 
     @Inject(method = "write", at = @At("HEAD"))
@@ -77,10 +78,15 @@ public abstract class KineticBlockEntityImpl implements DecayData {
         this.create_Limited$decay = compound.getInt(CommonConstants.MOD_ID + "_decay");
         this.create_Limited$seconds = compound.getLong(CommonConstants.MOD_ID + "_seconds");
     }
-//
-//    @Unique
-//    @Override
-//    public void repair() {
-//        this.decay = Math.max(this.decay, this.decay - 4);
-//    }
+
+    @Unique
+    @Override
+    public boolean repair(ItemStack itemStack) {
+        if (this.create_Limited$decay == -1) return false;
+        this.create_Limited$decay -= 1;
+        BlockPos blockPos = ((BlockEntityAccessor) this).getWorldPosition();
+        ((BlockEntityAccessor) this).getLevel().destroyBlockProgress(blockPos.hashCode(), blockPos, this.create_Limited$decay);
+        itemStack.shrink(1);
+        return true;
+    }
 }

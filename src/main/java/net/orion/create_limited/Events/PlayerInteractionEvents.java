@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -21,10 +22,10 @@ public class PlayerInteractionEvents {
         Player player = rightClickBlock.getEntity();
         Level level = rightClickBlock.getLevel();
         BlockPos pos = rightClickBlock.getPos();
-//        Block block = DatapackRegister.getBlock((ServerLevel) level, pos);
-        String itemId = BuiltInRegistries.ITEM.getKey(rightClickBlock.getItemStack().getItem()).toString();
+        ItemStack itemStack = rightClickBlock.getItemStack();
+        String itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString();
 
-//        if (!level.isClientSide && DatapackRegister.getDecayValue(((ServerLevel) level), pos) instanceof Long value && DatapackRegister.isValidRepairItem((ServerLevel) level, pos, itemId))
-//            ((DecayData) block).repair();
+        if (!level.isClientSide && DatapackRegister.getDecayValue(((ServerLevel) level), pos) instanceof Long value && DatapackRegister.isValidRepairItem((ServerLevel) level, pos, itemId))
+            rightClickBlock.setCanceled(((DecayData) level.getBlockEntity(pos)).repair(itemStack));
     }
 }
