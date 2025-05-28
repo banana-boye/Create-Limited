@@ -1,0 +1,8 @@
+{
+  "values": {
+    "create:water_wheel": {
+      "repairItems": "#minecraft:planks",
+      "decayTime": 10
+    }
+  }
+}

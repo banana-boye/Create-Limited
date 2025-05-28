@@ -11,13 +11,13 @@ import net.orion.create_limited.Data.Mod.Config.CommonConfig;
 public class CreateLimited {
 
     public CreateLimited() {
+        CommonConstants.mandatoryLog("Initializing Create: Limited...");
         ModContainer container = ModLoadingContext.get().getActiveContainer();
-//        IEventBus modEventBus = container.getEventBus();
 
+        CommonConstants.mandatoryLog("Loading config..");
         container.registerConfig(ModConfig.Type.COMMON, CommonConfig.CONFIG_SPEC);
+        CommonConstants.mandatoryLog("Config loaded.");
 
-        CommonConstants.debug("Initializing Create: Limited...");
-
-        CommonConstants.debug("Create: Limited initialized successfully.");
+        CommonConstants.mandatoryLog("Create: Limited initialized successfully.");
     }
 }

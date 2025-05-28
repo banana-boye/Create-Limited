@@ -23,9 +23,6 @@ public class CommonConfig {
     private CommonConfig(final ModConfigSpec.Builder builder) {
         this.builder = builder;
 
-        this.builder.push("Create: Limited config.");
-        this.builder.pop();
-
         this.builder.push("Debug:");
 
         this.log = this.builder
