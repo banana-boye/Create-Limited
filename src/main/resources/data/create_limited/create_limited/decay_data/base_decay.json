@@ -1,7 +1,11 @@
 {
   "values": {
     "create:water_wheel": {
-      "repairItems": "#minecraft:planks",
+      "repairItems": "minecraft:oak_planks",
+      "decayTime": 10
+    },
+    "create:steam_engine": {
+      "repairItems": "minecraft:copper_ingot",
       "decayTime": 10
     }
   }

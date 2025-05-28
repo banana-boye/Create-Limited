@@ -7,11 +7,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.orion.create_limited.Data.Constants.CommonConstants;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -26,21 +28,23 @@ public class DatapackRegister {
         newRegistry.dataPackRegistry(DECAY_KEY, DecayType.CODEC);
     }
 
-    public static boolean isInvalidRepairItem(ServerLevel server, BlockPos blockPos, String itemId) {
+    public static DecayType.DecayEntry getDecayEntry(ServerLevel server, BlockPos blockPos) {
         RegistryAccess registryAccess = server.registryAccess();
         Optional<Registry<DecayType>> registryOptional = registryAccess.registry(DatapackRegister.DECAY_KEY);
-        if (registryOptional.isEmpty()) return true;
+        if (registryOptional.isEmpty()) return null;
 
-        BlockState blockState = server.getBlockState(blockPos);
-        String blockKey = BuiltInRegistries.BLOCK.getKey(blockState.getBlock()).toString();
+        String blockKey = BuiltInRegistries.BLOCK.getKey(getBlock(server, blockPos)).toString();
 
         for (DecayType decayType : registryOptional.get()) {
             Map<String, DecayType.DecayEntry> map = decayType.blockDecayValueMap();
-            if (map.containsKey(blockKey)) {
-                if (map.get(blockKey).repairItems().items().contains(itemId)) return false;
-            }
+            if (map.containsKey(blockKey)) return map.get(blockKey);
         }
-        return true;
+        return null;
+    }
+
+    public static boolean isValidRepairItem(ServerLevel server, BlockPos blockPos, String itemId) {
+        if (getDecayEntry(server, blockPos) instanceof DecayType.DecayEntry decayEntry) return decayEntry.repairItems().items().contains(itemId);
+        else return false;
     }
 
     @Nullable
@@ -49,13 +53,17 @@ public class DatapackRegister {
         Optional<Registry<DecayType>> registryOptional = registryAccess.registry(DatapackRegister.DECAY_KEY);
         if (registryOptional.isEmpty()) return null;
 
-        BlockState blockState = server.getBlockState(blockPos);
-        String blockKey = BuiltInRegistries.BLOCK.getKey(blockState.getBlock()).toString();
+        String blockKey = BuiltInRegistries.BLOCK.getKey(getBlock(server, blockPos)).toString();
 
         for (DecayType decayType : registryOptional.get()) {
             Map<String, DecayType.DecayEntry> map = decayType.blockDecayValueMap();
             if (map.containsKey(blockKey)) return map.get(blockKey).decayTime();
         }
         return null;
+    }
+
+    public static @NotNull Block getBlock(ServerLevel server, BlockPos blockPos) {
+        BlockState blockState = server.getBlockState(blockPos);
+        return blockState.getBlock();
     }
 }
