@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "create_limited.refmap.json",
   "mixins": [
-    "KineticBlockEntityImpl",
+    "Implementations.KineticBlockEntityImpl",
+    "Implementations.PoweredShaftBlockEntityImpl",
     "Accessors.BlockEntityAccessor",
     "Accessors.SmartBlockEntityAccessor"
   ],

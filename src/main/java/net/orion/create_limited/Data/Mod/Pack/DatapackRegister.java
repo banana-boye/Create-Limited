@@ -55,7 +55,6 @@ public class DatapackRegister {
         if (registryOptional.isEmpty()) return null;
 
         String blockKey = BuiltInRegistries.BLOCK.getKey(getBlock(server, blockPos)).toString();
-        CommonConstants.debug(blockKey);
 
         for (DecayType decayType : registryOptional.get()) {
             Map<String, DecayType.DecayEntry> map = decayType.blockDecayValueMap();
