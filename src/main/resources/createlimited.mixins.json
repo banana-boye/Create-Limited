@@ -5,10 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "create_limited.refmap.json",
   "mixins": [
+    "Accessors.BlockEntityAccessor",
+    "Accessors.SmartBlockEntityAccessor",
     "Implementations.KineticBlockEntityImpl",
     "Implementations.PoweredShaftBlockEntityImpl",
-    "Accessors.BlockEntityAccessor",
-    "Accessors.SmartBlockEntityAccessor"
+    "Implementations.WaterWheelStructuralBlockImpl"
   ],
   "injectors": {
     "defaultRequire": 1

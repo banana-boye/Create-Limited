@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class KineticBlockEntityImpl implements DecayingBlockEntity {
 
     @Unique
-    int create_Limited$decay = -1;
+    float create_Limited$decay = -1;
 
     @Unique
     long create_Limited$seconds = 0;
@@ -74,12 +74,12 @@ public abstract class KineticBlockEntityImpl implements DecayingBlockEntity {
     }
 
     @Override
-    public void setCreate_Limited$decay(int i) {
+    public void setCreate_Limited$decay(float i) {
         this.create_Limited$decay = i;
     }
 
     @Override
-    public int getCreate_Limited$decay() {
+    public float getCreate_Limited$decay() {
         return this.create_Limited$decay;
     }
 }

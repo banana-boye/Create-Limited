@@ -11,6 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.orion.create_limited.Data.Constants.CommonConstants;
 import net.orion.create_limited.Data.Mod.Pack.DatapackRegister;
+import net.orion.create_limited.Data.Mod.Pack.DecayType;
 import net.orion.create_limited.Interfaces.DecayingBlockEntity;
 
 import java.util.Objects;
@@ -20,13 +21,12 @@ public class PlayerInteractionEvents {
 
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock rightClickBlock) {
-        Player player = rightClickBlock.getEntity();
-        Level level = rightClickBlock.getLevel();
-        BlockPos pos = rightClickBlock.getPos();
-        ItemStack itemStack = rightClickBlock.getItemStack();
-        String itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString();
+        if (handleUse(rightClickBlock.getItemStack(), rightClickBlock.getPos(), rightClickBlock.getLevel())) rightClickBlock.setCanceled(true);
+    }
 
-        if (!level.isClientSide && DatapackRegister.getDecayValue(((ServerLevel) level), pos) instanceof Long value && DatapackRegister.isValidRepairItem((ServerLevel) level, pos, itemId))
-            rightClickBlock.setCanceled(((DecayingBlockEntity) Objects.requireNonNull(level.getBlockEntity(pos))).repair(itemStack));
+    public static boolean handleUse(ItemStack itemStack, BlockPos pos, Level level) {
+        if (level instanceof ServerLevel server && DatapackRegister.getDecayEntry(server, pos) instanceof DecayType.DecayEntry decayEntry && DatapackRegister.isValidRepairItem(server, pos, itemStack))
+            return (((DecayingBlockEntity) Objects.requireNonNull(server.getBlockEntity(pos))).repair(itemStack, decayEntry));
+        return false;
     }
 }
