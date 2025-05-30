@@ -15,8 +15,7 @@
     },
     "create:windmill_bearing": {
       "repairItems": ["minecraft:cobblestone"],
-      "decayProgressTime": 3,
-      "type": "multi"
+      "decayProgressTime": 3
     }
   }
 }

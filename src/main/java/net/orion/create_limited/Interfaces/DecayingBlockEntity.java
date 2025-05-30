@@ -10,6 +10,7 @@ import net.orion.create_limited.Data.Constants.CommonConstants;
 import net.orion.create_limited.Data.Mod.Pack.DatapackRegister;
 import net.orion.create_limited.Data.Mod.Pack.DecayType;
 import net.orion.create_limited.Mixins.Accessors.BlockEntityAccessor;
+import net.orion.create_limited.Util.BlockTraversalUtil;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Objects;
@@ -40,6 +41,7 @@ public interface DecayingBlockEntity {
     default void lazyTickImpl(BlockPos blockPos) {
         Level level = ((BlockEntityAccessor) this).getLevel();
         if (!(level instanceof ServerLevel server) || !(DatapackRegister.getDecayEntry(server, blockPos) instanceof DecayType.DecayEntry decayEntry) || create_Limited$getGeneratedSpeedImpl() == 0) return;
+        updateConnectedComponents(level, blockPos);
 
         int id = blockPos.hashCode();
         setCreate_Limited$ticker(getCreate_Limited$ticker() + 1);
@@ -61,6 +63,10 @@ public interface DecayingBlockEntity {
             level.destroyBlockProgress(id, blockPos, -1);
             level.destroyBlock(blockPos, false);
         }
+    }
+
+    default void updateConnectedComponents(Level level, BlockPos pos) {
+        BlockTraversalUtil.findConnected(level, pos, DatapackRegister.isComponent())
     }
 
     @Unique

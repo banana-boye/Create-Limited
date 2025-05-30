@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @EventBusSubscriber(modid = CommonConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DatapackRegister {
@@ -92,5 +93,10 @@ public class DatapackRegister {
     public static Block getBlock(ServerLevel server, BlockPos blockPos) {
         BlockState blockState = server.getBlockState(blockPos);
         return blockState.getBlock();
+    }
+
+    public static boolean isComponent(ServerLevel server, BlockPos pos) {
+        if (getDecayEntry(server, pos) instanceof DecayType.DecayEntry decayEntry) return decayEntry.decayEnumType().equals(DecayType.DecayEnumType.COMPONENT);
+        else return false;
     }
 }
