@@ -56,11 +56,6 @@ public class DatapackRegister {
         } else return Blocks.AIR.defaultBlockState();
     }
 
-    public static DecayType.DecayEnumType getType(ServerLevel server, BlockPos pos) {
-        if (getDecayEntry(server, pos) instanceof DecayType.DecayEntry decayEntry) return decayEntry.decayEnumType();
-        else return null;
-    }
-
     public static int getRepairAmount(ServerLevel server, BlockPos pos) {
         if (getDecayEntry(server, pos) instanceof DecayType.DecayEntry decayEntry) return decayEntry.amountConsumed();
         else return 1;
@@ -93,10 +88,5 @@ public class DatapackRegister {
     public static Block getBlock(ServerLevel server, BlockPos blockPos) {
         BlockState blockState = server.getBlockState(blockPos);
         return blockState.getBlock();
-    }
-
-    public static boolean isComponent(ServerLevel server, BlockPos pos) {
-        if (getDecayEntry(server, pos) instanceof DecayType.DecayEntry decayEntry) return decayEntry.decayEnumType().equals(DecayType.DecayEnumType.COMPONENT);
-        else return false;
     }
 }
