@@ -3,19 +3,19 @@
     "create:water_wheel": {
       "repairItems": ["#minecraft:wooden_slabs"],
       "replaceWith": "minecraft:oak_planks",
-      "decayProgressTime": 1
+      "decayProgressTime": 14400
     },
     "create:large_water_wheel": {
       "repairItems": ["#minecraft:wooden_slabs"],
-      "decayProgressTime": 3
+      "decayProgressTime": 28800
     },
     "create:steam_engine": {
       "repairItems": ["minecraft:copper_ingot"],
-      "decayProgressTime": 3
+      "decayProgressTime": 172800
     },
     "create:windmill_bearing": {
       "repairItems": ["minecraft:cobblestone"],
-      "decayProgressTime": 3
+      "decayProgressTime": 43200
     }
   }
 }
